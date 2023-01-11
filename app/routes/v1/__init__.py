@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from fastapi import APIRouter
-
 from routes.v1.stock import router as router__stock
 from routes.v1.user import router as router__user
 from utils.constants import responses
-
 
 router = APIRouter()
 

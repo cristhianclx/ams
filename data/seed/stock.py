@@ -5,7 +5,6 @@ from sys import path as sys__path
 
 from models.stock import Stock
 
-
 data = [
     {
         "code": "AAPL",

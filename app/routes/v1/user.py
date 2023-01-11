@@ -2,24 +2,13 @@
 
 from datetime import timedelta
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-
-from sqlalchemy.orm import Session
-
-from forms.user import (
-    UserBaseForm,
-    UserForm,
-    UserLoginForm,
-)
+from fastapi import APIRouter, Depends, HTTPException, status
+from forms.user import UserBaseForm, UserForm, UserLoginForm
 from services.user import UserService
 from settings import ACCESS_TOKEN_EXPIRE_MINUTES
+from sqlalchemy.orm import Session
+from utils.auth import authenticate_user, create_access_token
 from utils.database import get__database
-from utils.auth import authenticate_user
-from utils.auth import create_access_token
-
 
 router = APIRouter()
 
@@ -49,6 +38,7 @@ def create(item: UserForm, db: Session = Depends(get__database)):
         "token": access_token,
     }
     return context
+
 
 @router.post("/login/")
 def login(item: UserLoginForm, db: Session = Depends(get__database)):
@@ -82,5 +72,5 @@ def login(item: UserLoginForm, db: Session = Depends(get__database)):
     return {
         "login": {
             "token": access_token,
-         }
+        }
     }

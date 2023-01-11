@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import (
-    Column,
-    DateTime,
-    func,
-)
+from sqlalchemy import Column, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
-
 
 Base = declarative_base()
 

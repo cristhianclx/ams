@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from db.schemas import Base
-
 from typing import Optional
-from pydantic import (
-    EmailStr,
-    validator,
-)
 
+from db.schemas import Base
+from pydantic import EmailStr, validator
 from utils.auth import get_password_hash
-
 
 USER_PASSWORD_MIN_LENGTH = 6
 

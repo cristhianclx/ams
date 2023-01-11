@@ -7,6 +7,6 @@ httpie
 ipdb
 ipython
 isort[colors]
-pre-commit-hooks
+pre-commit
 pylint
 pytest

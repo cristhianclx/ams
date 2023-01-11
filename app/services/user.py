@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
 
+from db.engine import SessionLocal
 from forms.user import UserForm
 from repositories.user import UserRepository
-from db.engine import SessionLocal
 
 
 class UserService:
-
     def __init__(self) -> None:
         self.repository = UserRepository
         self.schema = UserForm

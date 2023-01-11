@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from typing import Sequence
 
-from models.user import User
-from forms.user import UserForm
 from db.engine import SessionLocal
+from forms.user import UserForm
+from models.user import User
 from repositories.base import AbstractRepository
 
 
 class UserRepository(AbstractRepository):
-
     def __init__(self, session: SessionLocal):
         self.model = User
         self.session = session
@@ -23,6 +21,10 @@ class UserRepository(AbstractRepository):
         return item
 
     def get(self, email: str) -> User:
-        return self.session.query(self.model).filter(
-            self.model.email == email,
-        ).first()
+        return (
+            self.session.query(self.model)
+            .filter(
+                self.model.email == email,
+            )
+            .first()
+        )

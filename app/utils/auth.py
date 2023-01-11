@@ -1,28 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from datetime import (
-    datetime,
-    timedelta,
-)
-
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-from fastapi.security import OAuth2PasswordBearer
-
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
 from typing import Union
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
 from models.user import User
-from settings import (
-    ALGORITHM,
-    SECRET_KEY,
-)
+from passlib.context import CryptContext
+from pydantic import BaseModel
+from settings import ALGORITHM, SECRET_KEY
+from sqlalchemy.orm import Session
 from utils.database import get__database
-
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -31,7 +20,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
-    
+
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -43,6 +32,7 @@ def get_password_hash(password):
 
 def get_user(db: Session, email: str):
     from services.user import UserService
+
     service = UserService()
     user = service.get(db, email)
     if not user:

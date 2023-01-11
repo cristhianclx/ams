@@ -2,18 +2,16 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.responses import RedirectResponse
-
-from routes import base
-from routes import v1
-from settings.active import ALLOWED_HOSTS
-from settings.active import NAME
-from settings.active import STAGE
-from settings.active import STATIC_DIR
-from settings.active import TEMPLATES_DIR
-from settings.active import VERSION
-
+from fastapi.responses import FileResponse, RedirectResponse
+from routes import base, v1
+from settings.active import (
+    ALLOWED_HOSTS,
+    NAME,
+    STAGE,
+    STATIC_DIR,
+    TEMPLATES_DIR,
+    VERSION,
+)
 
 app: FastAPI = FastAPI(
     debug=True,

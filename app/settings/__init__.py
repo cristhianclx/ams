@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from settings.active import *
+from settings.active import *  # noqa: F401

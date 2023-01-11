@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-
-from sqlalchemy.orm import Session
-
+from fastapi import APIRouter, Depends, HTTPException, status
 from forms.stock import StockForm
 from models.user import User
 from services.stock import StockService
-from utils.database import get__database
+from sqlalchemy.orm import Session
 from utils.auth import get_current_active_user
-
+from utils.database import get__database
 
 router = APIRouter()
 
