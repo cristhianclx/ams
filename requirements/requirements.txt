@@ -1,0 +1,6 @@
+alembic==1.9.1
+fastapi[all]==0.89.0
+passlib[bcrypt]==1.7.4
+psycopg2==2.9.5
+python-jose==3.3.0
+SQLAlchemy==1.4.46
