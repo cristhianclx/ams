@@ -33,19 +33,19 @@ STAGE: str = "-"
 # static
 ##
 
-STATIC_DIR: str = "static"
+STATIC_DIR: str = "app/static"
 
 
 ##
 # templates
 ##
 
-TEMPLATES_DIR: str = "templates"
+TEMPLATES_DIR: str = "app/templates"
 
 
 ##
 # rate throttling
 ##
 
-RATE_THROTTLING_PER_SECOND = 1
-RATE_THROTTLING_PER_MINUTE = 10
+RATE_THROTTLING_PER_SECOND: int = 1
+RATE_THROTTLING_PER_MINUTE: int = 10

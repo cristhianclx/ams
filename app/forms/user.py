@@ -19,7 +19,7 @@ class UserForm(UserBaseForm):
     password: str
 
     @validator("password")
-    def password_validate(cls, value: str) -> str:  # pylint: disable=no-self-argument
+    def password_validate(cls, value: str) -> str:  # pylint:disable=no-self-argument
         if len(value) < USER_PASSWORD_MIN_LENGTH:
             raise ValueError(f"password needs to have at least {USER_PASSWORD_MIN_LENGTH} characters")
         value = get_password_hash(value)
@@ -31,7 +31,7 @@ class UserLoginForm(Base):
     password: str
 
     @validator("password")
-    def password_validate(cls, value: str) -> str:  # pylint: disable=no-self-argument
+    def password_validate(cls, value: str) -> str:  # pylint:disable=no-self-argument
         if len(value) < USER_PASSWORD_MIN_LENGTH:
             raise ValueError(f"password needs to have at least {USER_PASSWORD_MIN_LENGTH} characters")
         return value

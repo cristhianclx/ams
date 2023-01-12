@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from settings.base import *  # noqa: F401,F403 pylint: disable=wildcard-import,unused-wildcard-import
+from settings.base import *  # noqa:F401,F403 pylint:disable=wildcard-import,unused-wildcard-import
 
 ##
 # stage

@@ -2,6 +2,7 @@
 
 autoflake
 black
+Faker
 flake8
 httpie
 ipdb
@@ -11,3 +12,7 @@ mypy
 pre-commit
 pylint
 pytest
+pytest-cov
+requests_mock
+types-redis
+types-requests

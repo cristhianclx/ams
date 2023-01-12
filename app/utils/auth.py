@@ -31,7 +31,7 @@ def get_password_hash(password: str) -> str:
 
 
 def get_user(session: Session, email: str) -> Any:
-    from services.user import UserService  # pylint: disable=import-outside-toplevel
+    from services.user import UserService  # pylint:disable=import-outside-toplevel
 
     service = UserService()
     user = service.get(session, email)
@@ -43,9 +43,9 @@ def get_user(session: Session, email: str) -> Any:
 def authenticate_user(session: Session, email: str, password: str) -> Any:
     user = get_user(session, email)
     if not user:
-        return False
+        return None
     if not verify_password(password, user.password):
-        return False
+        return None
     return user
 
 
@@ -88,7 +88,8 @@ def get_current_user(
     return user, token
 
 
-def get_current_active_user(current_user: User, token: str = Depends(get_current_user)) -> Tuple[User, str]:
+def get_current_active_user(current_user_with_token: Tuple[User, str] = Depends(get_current_user)) -> Tuple[User, str]:
+    current_user, token = current_user_with_token
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user")
     return current_user, token

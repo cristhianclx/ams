@@ -1,0 +1,19 @@
+Well, I decided to have a single repository for "infrastructure" stuff and other for "app" stuff (code).
+
+1. I'm using docker-compose with docker, so we can pin to specific postgres version and a redis version, and we can run "code-test" (to run tests), "code-bash" (to run with bash) and "code" (to run all code).
+2. I decided to use FastAPI, requirements with latest versions (fastapi, psycopg2, alembic, sqlalchemy, linters, pytest, redis).
+3. Added basic bash commands (scripts/*.sh), some to wait for a database when is ready (scripts/wait/tcp.sh), others to run migrations and stuff related to commands we use to have our code running.
+4. Update github actions with workflow, run tests with docker-compose and deploy using ECS/ECR.
+5. Added uvicorn to run our project.
+6. Added FastAPI basic and some routes (ping, robots.txt, favicon.ico). ping method is a method we use to check if our code is running (we put this route in ALB).
+7. Added routes for /users and /stocks. Our goal is to try to create an API to sign up users, get token login and get data about a stock.
+8. Added settings for each env, one for settings/docker.py (for our docker image), other for settings/main.py (for our live env).
+9. Added a settings to get DATABASE_URL, REDIS_URL and ALPHA_VANTAGE_API_KEY from SSM store in live env.
+10. Added pythonpath so we can run alembic and gunicorn without need to do many hacks. Added alembic and create some migrations based on ORM.
+11. Added some data to seed our database, basic data for stocks.
+12. Added cache logic to throttle requests, we are using redis to control this. My first approach was to use nginx to control requests with rate limit, but is hard to maintain and control, so I moved to use redis with some logic to control requests.
+13. Also we are using redis to get data from AlphaVantage, we saw that this data is not changing frequently.
+14. Added tools to do some testing with pytest.
+15. For testing we are using sqlite, also added some monkeypatch and faker to generate fake data for tests.
+16. Added linters (black, flake8, pylint).
+18. Added coverage, we got 98% coverage.

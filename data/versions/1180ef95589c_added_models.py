@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 """added models
 
 Revision ID: 1180ef95589c
@@ -5,6 +7,9 @@ Revises:
 Create Date: 2023-01-11 12:39:02.671368
 
 """
+
+# pylint:skip-file
+
 import sqlalchemy as sa
 from alembic import op
 

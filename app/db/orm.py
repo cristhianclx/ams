@@ -23,4 +23,4 @@ class ModelBase(Base):
     )
 
 
-from models import *  # noqa: E402,F401,F403 # pylint: disable=wildcard-import,wrong-import-position,unused-wildcard-import
+from models import *  # noqa:E402,F401,F403 # pylint:disable=wildcard-import,wrong-import-position,unused-wildcard-import

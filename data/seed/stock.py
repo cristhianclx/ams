@@ -41,6 +41,6 @@ data = [
 
 sys__path.append("/code/")
 
-from data.seed.base import load__data  # pylint: disable=import-error
+from data.seed.base import load__data  # noqa:E402 pylint:disable=wrong-import-position
 
 load__data(Stock, Stock.code, data, "code")

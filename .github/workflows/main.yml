@@ -1,0 +1,69 @@
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+
+name: CI/CD
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: terraform-setup
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.3.7
+    - name: terraform-init
+      run: cd ./infrastructure/ && terraform init -backend=true -get=true -reconfigure -upgrade
+    - name: terraform-validate
+      run: cd ./infrastructure/ && terraform fmt -check -diff -recursive -no-color
+    - name: terraform-plan
+      run: cd ./infrastructure/ && terraform plan -no-color -refresh=true -var-file=./vars/${GITHUB_REF##*/}.tfvars
+    - name: terraform-apply
+      run: cd ./infrastructure/ && terraform apply -no-color -auto-approve -var-file=./vars/${GITHUB_REF##*/}.tfvars
+  code:
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: run-tests
+      run: docker-compose run code-test
+    - name: login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: push to ECR
+      id: build-ecr
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_MAIN }}
+        IMAGE_TAG: ${{ github.sha }}
+        TAG: ${GITHUB_REF##*/}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
+    - name: deploy to ECS
+      env:
+        ECS_CLUSTER: ${{ secrets.ECS_CLUSTER_MAIN }}
+        ECS_SERVICE: ${{ secrets.ECS_SERVICE_MAIN }}
+      run: |
+        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment

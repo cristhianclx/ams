@@ -52,7 +52,6 @@ services:
                            /code/scripts/venv.sh &&
                            /code/scripts/migrate.sh &&
                            /code/scripts/seed.sh &&
-                           /code/scripts/run.sh &&
                            /bin/bash"
   code-test:
     build: .
