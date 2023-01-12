@@ -4,3 +4,5 @@
 /.pytest_cache
 .coverage
 tests.db
+/infrastructure/.terraform/
+/infrastructure/.terraform.*
