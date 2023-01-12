@@ -13,12 +13,29 @@ To do some simple calls (with httpie):
     http POST 127.0.0.1:8000/v1/users/ first_name="Cristhian" last_name="Cueva" email="cristhianclx@gmail.com" password=123456
 
       {
-          ...
-          "login": {
-              "token": "13e5b7231df124393f99cf867e66a5125bf7b33a"
-          },
+        ...
+        "login": {
+          "token": eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY
+        },
       }
 
     http POST 127.0.0.1:8000/v1/users/login/ email="cristhianclx@gmail.com" password=123456
 
+      {
+        "login": {
+          "token": "eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY"
+        }
+      }
+
     http GET 127.0.0.1:8000/v1/stocks/META/ "Authorization: Bearer eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY"
+
+      {
+        "code": "META",
+        "name": "Faceboook",
+        "price": {
+          "high": 133.8494,
+          "low": 130.34,
+          "open": 130.96,
+          "variation": -0.1
+        }
+      }
