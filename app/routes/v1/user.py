@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import timedelta
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from forms.user import UserBaseForm, UserForm, UserLoginForm
@@ -16,17 +17,17 @@ service = UserService()
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create(item: UserForm, db: Session = Depends(get__database)):
+def create(item: UserForm, session: Session = Depends(get__database)) -> Any:
     """
     to create a new user with a token
     """
-    if service.get(db, item.email):
+    if service.get(session, item.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already registered",
         )
-    user = service.create(db, item)
-    context = UserBaseForm(user.dict())
+    user = service.create(session, item)
+    context = UserBaseForm.from_orm(user).dict()
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={
@@ -41,22 +42,22 @@ def create(item: UserForm, db: Session = Depends(get__database)):
 
 
 @router.post("/login/")
-def login(item: UserLoginForm, db: Session = Depends(get__database)):
+def login(item: UserLoginForm, session: Session = Depends(get__database)) -> Any:
     """
     to login and get a token
     """
-    user = service.get(db, item.email)
+    user = service.get(session, item.email)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User doesn't exist",
         )
+    user = authenticate_user(session, item.email, item.password)
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Inactive user",
         )
-    user = authenticate_user(db, item.email, item.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

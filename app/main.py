@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from routes import base, v1
-from settings.active import (
+from settings.active import (  # noqa: F401 # pylint: disable=unused-import
     ALLOWED_HOSTS,
     NAME,
     STAGE,
@@ -15,9 +17,9 @@ from settings.active import (
 
 app: FastAPI = FastAPI(
     debug=True,
-    title="{} - {}".format(NAME, STAGE),
+    title=f"{NAME} - {STAGE}",
     redoc_url=None,
-    version="{}".format(VERSION),
+    version=f"{VERSION}",
 )
 
 
@@ -38,7 +40,7 @@ app.include_router(v1.router, prefix="/v1")
 
 # /
 @app.get("/", include_in_schema=False)
-async def root():
+def root() -> Any:
     """
     /
     """
@@ -47,17 +49,17 @@ async def root():
 
 # /robots.txt
 @app.get("/robots.txt", include_in_schema=False)
-async def robots_txt():
+def robots_txt() -> Any:
     """
     robots.txt to now allow spiders
     """
-    return FileResponse("{}/robots.txt".format(TEMPLATES_DIR))
+    return FileResponse(f"{TEMPLATES_DIR}/robots.txt")
 
 
 # /favicon.ico
 @app.get("/favicon.ico", include_in_schema=False)
-async def favicon_ico():
+def favicon_ico() -> Any:
     """
     favicon.ico
     """
-    return FileResponse("{}/ico/favicon.ico".format(STATIC_DIR))
+    return FileResponse("{STATIC_DIR}/ico/favicon.ico")

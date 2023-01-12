@@ -2,8 +2,9 @@
 
 from sqlalchemy import Column, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm.decl_api import DeclarativeMeta
 
-Base = declarative_base()
+Base: DeclarativeMeta = declarative_base()
 
 
 class ModelBase(Base):
@@ -22,4 +23,4 @@ class ModelBase(Base):
     )
 
 
-from models import *  # noqa: F401
+from models import *  # noqa: E402,F401,F403 # pylint: disable=wildcard-import,wrong-import-position,unused-wildcard-import

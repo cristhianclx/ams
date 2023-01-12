@@ -11,12 +11,12 @@ class User(ModelBase):
     first_name = Column(
         String,
         index=True,
-        nullable=False,
+        nullable=True,
     )
     last_name = Column(
         String,
         index=True,
-        nullable=False,
+        nullable=True,
     )
     password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)

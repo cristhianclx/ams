@@ -41,3 +41,11 @@ STATIC_DIR: str = "static"
 ##
 
 TEMPLATES_DIR: str = "templates"
+
+
+##
+# rate throttling
+##
+
+RATE_THROTTLING_PER_SECOND = 1
+RATE_THROTTLING_PER_MINUTE = 10

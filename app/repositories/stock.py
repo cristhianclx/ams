@@ -10,11 +10,11 @@ class StockRepository(AbstractRepository):
         self.model = Stock
         self.session = session
 
-    def get(self, code: str) -> Stock:
+    def get(self, reference: str) -> Stock:
         return (
             self.session.query(self.model)
             .filter(
-                self.model.code == code,
+                self.model.code == reference,
             )
             .first()
         )

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 from db.engine import SessionLocal
 from forms.user import UserForm
 from models.user import User
@@ -20,11 +19,11 @@ class UserRepository(AbstractRepository):
         self.session.refresh(item)
         return item
 
-    def get(self, email: str) -> User:
+    def get(self, reference: str) -> User:
         return (
             self.session.query(self.model)
             .filter(
-                self.model.email == email,
+                self.model.email == reference,
             )
             .first()
         )

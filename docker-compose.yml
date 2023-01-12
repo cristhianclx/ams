@@ -8,19 +8,25 @@ services:
       POSTGRES_DB: bbdd
       POSTGRES_USER: api
       POSTGRES_PASSWORD: password
+  redis:
+    container_name: cache
+    image: redis:7
   code:
     build: .
     ports:
       - "8000:8000"
     links:
       - database
+      - redis
     volumes:
       - .:/code
     depends_on:
       - database
+      - redis
     environment:
       - PORT=8000
     command: /bin/bash -c "/code/scripts/wait/tcp.sh database 5432 &&
+                           /code/scripts/wait/tcp.sh redis 6379 &&
                            /code/scripts/settings/docker.sh &&
                            /code/scripts/venv.sh &&
                            /code/scripts/migrate.sh &&
@@ -32,17 +38,21 @@ services:
       - "8000:8000"
     links:
       - database
+      - redis
     volumes:
       - .:/code
     depends_on:
       - database
+      - redis
     environment:
       - PORT=8000
     command: /bin/bash -c "/code/scripts/wait/tcp.sh database 5432 &&
+                           /code/scripts/wait/tcp.sh redis 6379 &&
                            /code/scripts/settings/docker.sh &&
                            /code/scripts/venv.sh &&
                            /code/scripts/migrate.sh &&
                            /code/scripts/seed.sh &&
+                           /code/scripts/run.sh &&
                            /bin/bash"
   code-test:
     build: .
@@ -50,11 +60,14 @@ services:
       - "8000:8000"
     links:
       - database
+      - redis
     depends_on:
       - database
+      - redis
     environment:
       - PORT=8000
     command: /bin/bash -c "/code/scripts/wait/tcp.sh database 5432 &&
+                           /code/scripts/wait/tcp.sh redis 6379 &&
                            /code/scripts/settings/docker.sh &&
                            /code/scripts/venv.sh &&
                            /code/scripts/migrate.sh &&

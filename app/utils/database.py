@@ -3,7 +3,7 @@
 from db.engine import SessionLocal
 
 
-def get__database():
+def get__database() -> SessionLocal:
     database = SessionLocal()
     try:
         yield database

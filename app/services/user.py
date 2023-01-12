@@ -1,38 +1,27 @@
 # -*- coding: utf-8 -*-
 
-
 from db.engine import SessionLocal
 from forms.user import UserForm
+from models.user import User
 from repositories.user import UserRepository
 
 
 class UserService:
     def __init__(self) -> None:
         self.repository = UserRepository
-        self.schema = UserForm
 
     def create(
         self,
-        db: SessionLocal,
+        session: SessionLocal,
         item: UserForm,
-    ) -> UserForm:
-        repo = self.repository(db)
-        cc = repo.create(item=item)
-        return self.schema.from_orm(cc)
+    ) -> User:
+        repo = self.repository(session)
+        return repo.create(item=item)
 
     def get(
         self,
-        db: SessionLocal,
+        session: SessionLocal,
         email: str,
-    ) -> UserForm:
-        repo = self.repository(db)
-        return repo.get(email=email)
-
-    def update(
-        self,
-        db: SessionLocal,
-        email: str,
-        item: UserForm,
-    ) -> UserForm:
-        repo = self.repository(db)
-        return repo.update(reference=reference, item=item)
+    ) -> User:
+        repo = self.repository(session)
+        return repo.get(reference=email)

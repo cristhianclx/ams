@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any, Tuple
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from forms.stock import StockForm
-from models.user import User
 from services.stock import StockService
 from sqlalchemy.orm import Session
-from utils.auth import get_current_active_user
+from utils.cache import get_api_usage
 from utils.database import get__database
 
 router = APIRouter()
@@ -14,11 +15,15 @@ service = StockService()
 
 
 @router.get("/{code}/", response_model=StockForm)
-def get(code: str, db: Session = Depends(get__database), current_user: User = Depends(get_current_active_user)):
+def get(
+    code: str,
+    session: Session = Depends(get__database),
+    user_with_api_usage: Tuple = Depends(get_api_usage),
+) -> Any:
     """
     to get stock data
     """
-    stock = service.get(code, db)
+    stock = service.get(code, session)
     if not stock:
         raise HTTPException(
             status_code=status.HTTP_404_DOES_NOT_EXIST,
